@@ -68,6 +68,7 @@
       <module>demos/lucene-directory-demo</module>
       <module>demos/gridfs-webdav</module>
       <module>tools</module>
+      <module>cdi</module>
    </modules>
 
    <profiles>
