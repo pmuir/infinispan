@@ -37,7 +37,7 @@ public class RpcManagerFactory extends EmptyConstructorNamedCacheFactory impleme
    @Override
    public <T> T construct(Class<T> componentType) {
       // only do this if we have a transport configured!
-      if (globalConfiguration.getTransportClass() == null) return null;
+      if (globalConfiguration.getTransport() == null) return null;
       return super.construct(componentType);
    }
 }

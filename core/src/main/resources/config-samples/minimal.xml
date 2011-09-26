@@ -21,4 +21,53 @@
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
-<infinispan />
+<infinispan
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="urn:infinispan:config:5.1 http://www.infinispan.org/schemas/infinispan-config-5.1.xsd"
+      xmlns="urn:infinispan:config:5.1">
+   
+<default>
+   <clustering mode="">
+      <async asyncMarshalling="true" replQueueClass="" replQueueInterval="" replQueueMaxElements="" useReplQueue="true" />
+      <hash class="" hashFunctionClass="" hashSeedClass="" numOwners="" numVirtualNodes="" rehashEnabled="true" rehashRpcTimeout="" rehashWait="">
+         <groups enabled="true">
+            <grouper class=""/>
+         </groups>
+      </hash>
+      <l1 enabled="true" invalidationThreshold="" lifespan="" onRehash="true"/>
+      <stateRetrieval alwaysProvideInMemoryState="true" fetchInMemoryState="true" initialRetryWaitTime="" logFlushTimeout="" maxNonProgressingLogWrites="" numRetries="" retryWaitTimeIncreaseFactor="" timeout=""/>
+      <sync replTimeout=""/>
+   </clustering>
+   <customInterceptors>
+      <interceptor after="" before="" class="" index="" position="">
+         <properties></properties>
+      </interceptor>
+   </customInterceptors>
+   <dataContainer class="">
+      <properties></properties>
+   </dataContainer>
+   <deadlockDetection enabled="true" spinDuration=""/>
+   <eviction maxEntries="" strategy="NONE" threadPolicy="PIGGYBACK" wakeUpInterval="" />
+   <expiration lifespan="" maxIdle="" reaperEnabled="true" wakeUpInterval=""/>
+   <indexing enabled="true" indexLocalOnly="true">
+      <properties></properties>
+   </indexing>
+   <invocationBatching enabled="true"/>
+   <jmxStatistics enabled="true"/>
+   <lazyDeserialization enabled="true"/>
+   <loaders passivation="true" preload="true" shared="true">
+      <loader class="" fetchPersistentState="true" ignoreModifications="true" purgeOnStartup="true" purgerThreads="" purgeSynchronously="true">
+         <async enabled="true" flushLockTimeout="" modificationQueueSize="" shutdownTimeout="" threadPoolSize=""/>
+         <properties></properties>
+         <singletonStore enabled="true" pushStateTimeout="" pushStateWhenCoordinator="true"/>
+      </loader>
+   </loaders>
+   <locking concurrencyLevel="" isolationLevel="NONE" lockAcquisitionTimeout="" useLockStriping="true" writeSkewCheck="true"/>
+   <storeAsBinary enabled="true" storeKeysAsBinary="true" storeValuesAsBinary="true"/>
+   <transaction autoCommit="true" cacheStopTimeout="" eagerLockSingleNode="true" lockingMode="OPTIMISTIC" syncCommitPhase="true" syncRollbackPhase="true" transactionManagerLookupClass="" transactionMode="NON_TRANSACTIONAL" useEagerLocking="true" useSynchronization="true">
+      <recovery enabled="true" recoveryInfoCacheName=""/>
+   </transaction>
+   <unsafe unreliableReturnValues="true"/>
+</default>
+
+</infinispan>

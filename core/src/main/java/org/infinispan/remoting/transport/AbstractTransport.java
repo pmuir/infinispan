@@ -23,7 +23,7 @@
 package org.infinispan.remoting.transport;
 
 import org.infinispan.CacheException;
-import org.infinispan.config.GlobalConfiguration;
+import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.manager.NamedCacheNotFoundException;
 import org.infinispan.remoting.RpcException;
 import org.infinispan.remoting.responses.ExceptionResponse;
@@ -49,7 +49,7 @@ public abstract class AbstractTransport implements Transport {
    }
 
    protected final boolean shouldThrowException(Exception ce) {
-      if (!configuration.isStrictPeerToPeer()) {
+      if (!configuration.getTransport().isStrictPeerToPeer()) {
          if (ce instanceof NamedCacheNotFoundException) return false;
          if (ce.getCause() != null && ce.getCause() instanceof NamedCacheNotFoundException) return false;
       }

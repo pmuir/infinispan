@@ -22,11 +22,20 @@
  */
 package org.infinispan.factories;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.management.MBeanServerFactory;
+
 import org.infinispan.CacheException;
 import org.infinispan.Version;
 import org.infinispan.commands.module.ModuleCommandFactory;
 import org.infinispan.commands.module.ModuleCommandInitializer;
-import org.infinispan.config.GlobalConfiguration;
+import org.infinispan.configuration.global.GlobalConfiguration;
+import org.infinispan.configuration.global.ShutdownHookBehavior;
 import org.infinispan.factories.annotations.SurvivesRestarts;
 import org.infinispan.factories.scopes.Scope;
 import org.infinispan.factories.scopes.Scopes;
@@ -41,16 +50,7 @@ import org.infinispan.util.ModuleProperties;
 import org.infinispan.util.logging.Log;
 import org.infinispan.util.logging.LogFactory;
 
-import javax.management.MBeanServerFactory;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static org.infinispan.config.GlobalConfiguration.ShutdownHookBehavior.DEFAULT;
-import static org.infinispan.config.GlobalConfiguration.ShutdownHookBehavior.REGISTER;
 
 /**
  * A global component registry where shared components are stored.
@@ -130,11 +130,11 @@ public class GlobalComponentRegistry extends AbstractComponentRegistry {
    @Override
    protected void addShutdownHook() {
       ArrayList al = MBeanServerFactory.findMBeanServer(null);
-      boolean registerShutdownHook = (globalConfiguration.getShutdownHookBehavior() == DEFAULT && al.isEmpty())
-            || globalConfiguration.getShutdownHookBehavior() == REGISTER;
+      boolean registerShutdownHook = (globalConfiguration.getShutdown().getHookBehavior() == ShutdownHookBehavior.DEFAULT && al.isEmpty())
+            || globalConfiguration.getShutdown().getHookBehavior() == ShutdownHookBehavior.REGISTER;
 
       if (registerShutdownHook) {
-         log.tracef("Registering a shutdown hook.  Configured behavior = %s", globalConfiguration.getShutdownHookBehavior());
+         log.tracef("Registering a shutdown hook.  Configured behavior = %s", globalConfiguration.getShutdown().getHookBehavior());
          shutdownHook = new Thread() {
             @Override
             public void run() {
@@ -150,7 +150,7 @@ public class GlobalComponentRegistry extends AbstractComponentRegistry {
          Runtime.getRuntime().addShutdownHook(shutdownHook);
       } else {
 
-         log.tracef("Not registering a shutdown hook.  Configured behavior = %s", globalConfiguration.getShutdownHookBehavior());
+         log.tracef("Not registering a shutdown hook.  Configured behavior = %s", globalConfiguration.getShutdown().getHookBehavior());
       }
    }
 

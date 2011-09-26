@@ -149,7 +149,7 @@ public class JGroupsTransport extends AbstractTransport implements MembershipLis
    }
 
    public void start() {
-      props = TypedProperties.toTypedProperties(configuration.getTransportProperties());
+      props = TypedProperties.toTypedProperties(configuration.getTransport().getProperties());
 
       if (log.isInfoEnabled()) log.startingJGroupsChannel();
 
@@ -161,7 +161,7 @@ public class JGroupsTransport extends AbstractTransport implements MembershipLis
 
    protected void startJGroupsChannelIfNeeded() {
       if (startChannel) {
-         String clusterName = configuration.getClusterName();
+         String clusterName = configuration.getTransport().getClusterName();
          try {
             channel.connect(clusterName);
          } catch (Exception e) {
@@ -172,7 +172,7 @@ public class JGroupsTransport extends AbstractTransport implements MembershipLis
             // Normally this would be done by CacheManagerJmxRegistration but
             // the channel is not started when the cache manager starts but
             // when first cache starts, so it's safer to do it here.
-            globalStatsEnabled = configuration.isExposeGlobalJmxStatistics();
+            globalStatsEnabled = configuration.getGlobalJmxStatistics().isEnabled();
             if (globalStatsEnabled) {
                String groupName = String.format("type=channel,cluster=%s", ObjectName.quote(clusterName));
                mbeanServer = JmxUtil.lookupMBeanServer(configuration);
@@ -236,7 +236,7 @@ public class JGroupsTransport extends AbstractTransport implements MembershipLis
          buildChannel();
          // Channel.LOCAL *must* be set to false so we don't see our own messages - otherwise invalidations targeted at
          // remote instances will be received by self.
-         String transportNodeName = configuration.getTransportNodeName();
+         String transportNodeName = configuration.getTransport().getNodeName();
          if (transportNodeName != null && transportNodeName.length() > 0) {
             long range = Short.MAX_VALUE * 2;
             long randomInRange = (long) ((Math.random() * range) % range) + 1;
@@ -248,12 +248,12 @@ public class JGroupsTransport extends AbstractTransport implements MembershipLis
       channel.setDiscardOwnMessages(true);
 
       // if we have a TopologyAwareConsistentHash, we need to set our own address generator in JGroups:
-      if(configuration.hasTopologyInfo()) {
+      if(configuration.getTransport().hasTopologyInfo()) {
          ((JChannel)channel).setAddressGenerator(new AddressGenerator() {
 
             public org.jgroups.Address generateAddress() {
                return TopologyUUID.randomUUID(channel.getName(),
-                     configuration.getSiteId(), configuration.getRackId(), configuration.getMachineId());
+                     configuration.getTransport().getSiteId(), configuration.getTransport().getRackId(), configuration.getTransport().getMachineId());
 
             }
          });

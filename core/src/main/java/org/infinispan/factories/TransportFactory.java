@@ -37,8 +37,7 @@ public class TransportFactory extends AbstractComponentFactory implements AutoIn
 
    @SuppressWarnings("unchecked")
    public <T> T construct(Class<T> componentType) {
-      String transportClass = globalConfiguration.getTransportClass();
-      if (transportClass == null) return null;
-      return (T) Util.getInstance(transportClass, globalConfiguration.getClassLoader());
+      // TODO Remove this factory
+      return (T) globalConfiguration.getTransport();
    }
 }

@@ -58,8 +58,8 @@ public class NamedExecutorsFactory extends NamedComponentFactory implements Auto
             synchronized (this) {
                if (notificationExecutor == null) {
                   notificationExecutor = buildAndConfigureExecutorService(
-                        globalConfiguration.getAsyncListenerExecutorFactoryClass(),
-                        globalConfiguration.getAsyncListenerExecutorProperties(), componentName);
+                        globalConfiguration.getAsyncListenerExecutor().getFactory(),
+                        globalConfiguration.getAsyncListenerExecutor().getProperties(), componentName);
                }
             }
             return (T) notificationExecutor;
@@ -67,8 +67,8 @@ public class NamedExecutorsFactory extends NamedComponentFactory implements Auto
             synchronized (this) {
                if (asyncTransportExecutor == null) {
                   asyncTransportExecutor = buildAndConfigureExecutorService(
-                        globalConfiguration.getAsyncTransportExecutorFactoryClass(),
-                        globalConfiguration.getAsyncTransportExecutorProperties(), componentName);
+                        globalConfiguration.getAsyncTransportExecutor().getFactory(),
+                        globalConfiguration.getAsyncTransportExecutor().getProperties(), componentName);
                }
             }
             return (T) asyncTransportExecutor;
@@ -76,8 +76,8 @@ public class NamedExecutorsFactory extends NamedComponentFactory implements Auto
             synchronized (this) {
                if (evictionExecutor == null) {
                   evictionExecutor = buildAndConfigureScheduledExecutorService(
-                        globalConfiguration.getEvictionScheduledExecutorFactoryClass(),
-                        globalConfiguration.getEvictionScheduledExecutorProperties(), componentName);
+                        globalConfiguration.getEvictionScheduledExecutor().getFactory(),
+                        globalConfiguration.getEvictionScheduledExecutor().getProperties(), componentName);
                }
             }
             return (T) evictionExecutor;
@@ -85,8 +85,8 @@ public class NamedExecutorsFactory extends NamedComponentFactory implements Auto
             synchronized (this) {
                if (asyncReplicationExecutor == null) {
                   asyncReplicationExecutor = buildAndConfigureScheduledExecutorService(
-                        globalConfiguration.getReplicationQueueScheduledExecutorFactoryClass(),
-                        globalConfiguration.getReplicationQueueScheduledExecutorProperties(), componentName);
+                        globalConfiguration.getReplicationQueueScheduledExecutor().getFactory(),
+                        globalConfiguration.getReplicationQueueScheduledExecutor().getProperties(), componentName);
                }
             }
             return (T) asyncReplicationExecutor;
@@ -107,20 +107,18 @@ public class NamedExecutorsFactory extends NamedComponentFactory implements Auto
       if (evictionExecutor != null) evictionExecutor.shutdownNow();
    }
 
-   private ExecutorService buildAndConfigureExecutorService(String factoryName, Properties p, String componentName) throws Exception {
+   private ExecutorService buildAndConfigureExecutorService(ExecutorFactory f, Properties p, String componentName) throws Exception {
       Properties props = new Properties(p); // defensive copy
       if (p != null && !p.isEmpty()) props.putAll(p);
-      ExecutorFactory f = (ExecutorFactory) Util.getInstance(factoryName, globalConfiguration.getClassLoader());
       setComponentName(componentName, props);
       setDefaultThreads(KnownComponentNames.getDefaultThreads(componentName), props);
       setDefaultThreadPrio(KnownComponentNames.getDefaultThreadPrio(componentName), props);
       return f.getExecutor(props);
    }
 
-   private ScheduledExecutorService buildAndConfigureScheduledExecutorService(String factoryName, Properties p, String componentName) throws Exception {
+   private ScheduledExecutorService buildAndConfigureScheduledExecutorService(ScheduledExecutorFactory f, Properties p, String componentName) throws Exception {
       Properties props = new Properties(); // defensive copy
       if (p != null && !p.isEmpty()) props.putAll(p);
-      ScheduledExecutorFactory f = (ScheduledExecutorFactory) Util.getInstance(factoryName, globalConfiguration.getClassLoader());
       setComponentName(componentName, props);
       setDefaultThreadPrio(KnownComponentNames.getDefaultThreadPrio(componentName), props);
       return f.getScheduledExecutor(props);

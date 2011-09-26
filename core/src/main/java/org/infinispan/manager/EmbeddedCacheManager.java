@@ -24,7 +24,7 @@ package org.infinispan.manager;
 
 import org.infinispan.Cache;
 import org.infinispan.config.Configuration;
-import org.infinispan.config.GlobalConfiguration;
+import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.factories.annotations.SurvivesRestarts;
 import org.infinispan.factories.scopes.Scope;
 import org.infinispan.factories.scopes.Scopes;

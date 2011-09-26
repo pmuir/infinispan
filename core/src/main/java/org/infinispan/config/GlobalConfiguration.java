@@ -1280,7 +1280,7 @@ public class GlobalConfiguration extends AbstractConfigurationBean {
       }
 
       @XmlAttribute
-      public Boolean getStrictPeerToPeer() {
+      public Boolean isStrictPeerToPeer() {
          return strictPeerToPeer;
       }
 
@@ -1570,7 +1570,7 @@ public class GlobalConfiguration extends AbstractConfigurationBean {
       }
 
       @XmlAttribute
-      public String getJmxDomain() {
+      public String getDomain() {
          return jmxDomain;
       }
 

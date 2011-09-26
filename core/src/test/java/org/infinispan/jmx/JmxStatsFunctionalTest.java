@@ -61,11 +61,11 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
    public void destroyCacheManager() {
       TestingUtil.killCacheManagers(cm, cm2, cm3);
       if (cm != null)
-         assert !existsDomains(cm.getGlobalConfiguration().getJmxDomain());
+         assert !existsDomains(cm.getGlobalConfiguration().getDomain());
       if (cm2 != null)
-         assert !existsDomains(cm2.getGlobalConfiguration().getJmxDomain());
+         assert !existsDomains(cm2.getGlobalConfiguration().getDomain());
       if (cm3 != null)
-         assert !existsDomains(cm3.getGlobalConfiguration().getJmxDomain());
+         assert !existsDomains(cm3.getGlobalConfiguration().getDomain());
       cm = null;
       cm2 = null;
       cm3 = null;
@@ -80,7 +80,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       globalConfiguration.setExposeGlobalJmxStatistics(true);
       globalConfiguration.setMBeanServerLookup(PerThreadMBeanServerLookup.class.getName());
       cm = TestCacheManagerFactory.createCacheManager(globalConfiguration);
-      String jmxDomain = cm.getGlobalConfiguration().getJmxDomain();
+      String jmxDomain = cm.getGlobalConfiguration().getDomain();
 
       Configuration localCache = config();//local by default
       cm.defineConfiguration("local_cache", localCache);
@@ -114,7 +114,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       GlobalConfiguration globalConfiguration = GlobalConfiguration.getClusteredDefault();
       globalConfiguration.setMBeanServerLookup(PerThreadMBeanServerLookup.class.getName());
       cm = TestCacheManagerFactory.createCacheManager(globalConfiguration);
-      String jmxDomain = cm.getGlobalConfiguration().getJmxDomain();
+      String jmxDomain = cm.getGlobalConfiguration().getDomain();
 
       Configuration localCache = config();//local by default
       cm.defineConfiguration("local_cache", localCache);
@@ -129,7 +129,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       globalConfiguration.setExposeGlobalJmxStatistics(true);
       globalConfiguration.setMBeanServerLookup(PerThreadMBeanServerLookup.class.getName());
       cm = TestCacheManagerFactory.createCacheManager(globalConfiguration);
-      String jmxDomain = globalConfiguration.getJmxDomain();
+      String jmxDomain = globalConfiguration.getDomain();
 
       Configuration localCache = config();//local by default
       localCache.setExposeJmxStatistics(false);
@@ -152,7 +152,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       globalConfiguration.setExposeGlobalJmxStatistics(false);
       globalConfiguration.setMBeanServerLookup(PerThreadMBeanServerLookup.class.getName());
       cm = TestCacheManagerFactory.createCacheManager(globalConfiguration);
-      String jmxDomain = globalConfiguration.getJmxDomain();
+      String jmxDomain = globalConfiguration.getDomain();
 
       Configuration localCache = config();//local by default
       localCache.setExposeJmxStatistics(true);
@@ -215,7 +215,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       localCache.setExposeJmxStatistics(true);
       cm.defineConfiguration("local_cache", localCache);
       cm.getCache("local_cache");
-      String jmxDomain = globalConfiguration.getJmxDomain();
+      String jmxDomain = globalConfiguration.getDomain();
       assert existsObject(getCacheObjectName(jmxDomain, "local_cache(local)", "Statistics"));
 
       GlobalConfiguration globalConfigurationClone = globalConfiguration.clone();
@@ -235,7 +235,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       globalConfiguration.setExposeGlobalJmxStatistics(true);
       globalConfiguration.setMBeanServerLookup(PerThreadMBeanServerLookup.class.getName());
       cm = TestCacheManagerFactory.createCacheManager(globalConfiguration);
-      String jmxDomain = globalConfiguration.getJmxDomain();
+      String jmxDomain = globalConfiguration.getDomain();
       Configuration localCache = config();//local by default
       localCache.setExposeJmxStatistics(true);
       cm.defineConfiguration("local_cache", localCache);
@@ -247,7 +247,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       globalConfiguration2.setAllowDuplicateDomains(true);
       globalConfiguration2.setMBeanServerLookup(PerThreadMBeanServerLookup.class.getName());
       cm2 = TestCacheManagerFactory.createCacheManager(globalConfiguration2);
-      String jmxDomain2 = cm2.getGlobalConfiguration().getJmxDomain();
+      String jmxDomain2 = cm2.getGlobalConfiguration().getDomain();
       Configuration localCache2 = config();//local by default
       localCache2.setExposeJmxStatistics(true);
       cm2.defineConfiguration("local_cache", localCache);
@@ -263,7 +263,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       localCache3.setExposeJmxStatistics(true);
       cm3.defineConfiguration("local_cache", localCache);
       cm3.getCache("local_cache");
-      String jmxDomain3 = cm3.getGlobalConfiguration().getJmxDomain();
+      String jmxDomain3 = cm3.getGlobalConfiguration().getDomain();
       assert existsObject(getCacheObjectName(jmxDomain3, "local_cache(local)", "Statistics"));
    }
 
@@ -276,7 +276,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       localCache.setExposeJmxStatistics(true);
       cm.defineConfiguration("local_cache", localCache);
       cm.getCache("local_cache");
-      String jmxDomain = globalConfiguration.getJmxDomain();
+      String jmxDomain = globalConfiguration.getDomain();
       assert existsObject(getCacheObjectName(jmxDomain, "local_cache(local)", "Statistics"));
 
       TestingUtil.killCacheManagers(cm);
@@ -293,7 +293,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       Configuration localCache = config();//local by default
       cm.defineConfiguration("local_cache", localCache);
       cm.getCache("local_cache");
-      String jmxDomain = cm.getGlobalConfiguration().getJmxDomain();
+      String jmxDomain = cm.getGlobalConfiguration().getDomain();
       assert existsObject(getCacheObjectName(jmxDomain, "local_cache(local)", "Statistics"));
       assert existsObject(getCacheObjectName(jmxDomain, "local_cache(local)", "Cache"));
 
@@ -308,7 +308,7 @@ public class JmxStatsFunctionalTest extends AbstractInfinispanTest {
       remoteCache.setCacheMode(Configuration.CacheMode.REPL_SYNC);
       cm2.defineConfiguration("remote_cache", remoteCache);
       cm2.getCache("remote_cache");
-      String jmxDomain2 = cm2.getGlobalConfiguration().getJmxDomain();
+      String jmxDomain2 = cm2.getGlobalConfiguration().getDomain();
       assert existsObject(getCacheObjectName(jmxDomain2, "remote_cache(repl_sync)", "Cache"));
       assert existsObject(getCacheObjectName(jmxDomain2, "remote_cache(repl_sync)", "Statistics"));
 

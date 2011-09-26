@@ -23,7 +23,7 @@
 package org.infinispan.lifecycle;
 
 import org.infinispan.config.Configuration;
-import org.infinispan.config.GlobalConfiguration;
+import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.factories.ComponentRegistry;
 import org.infinispan.factories.GlobalComponentRegistry;
 

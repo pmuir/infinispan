@@ -104,7 +104,7 @@ public class ProgrammaticConfigurationTest extends AbstractInfinispanTest {
       assertEquals("id", gc.getMachineId());
       assert gc.isStrictPeerToPeer();
 
-      assertEquals("org.my.infinispan", gc.getJmxDomain());
+      assertEquals("org.my.infinispan", gc.getDomain());
       assert gc.isExposeGlobalJmxStatistics();
       assert gc.isAllowDuplicateDomains();
       assertEquals("BooMooCacheManager", gc.getCacheManagerName());

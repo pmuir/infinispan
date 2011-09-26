@@ -33,7 +33,7 @@ import org.infinispan.cacheviews.CacheView;
 import org.infinispan.commands.RemoteCommandsFactory;
 import org.infinispan.config.AdvancedExternalizerConfig;
 import org.infinispan.config.ConfigurationException;
-import org.infinispan.config.GlobalConfiguration;
+import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.container.entries.ImmortalCacheEntry;
 import org.infinispan.container.entries.ImmortalCacheValue;
 import org.infinispan.container.entries.MortalCacheEntry;
@@ -96,6 +96,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -313,21 +314,19 @@ public class ExternalizerTable implements ObjectTable {
    private void loadForeignMarshallables(GlobalConfiguration globalCfg) {
       if (log.isTraceEnabled())
          log.trace("Loading user defined externalizers");
-      List<AdvancedExternalizerConfig> configs = globalCfg.getExternalizers();
-      for (AdvancedExternalizerConfig config : configs) {
-         AdvancedExternalizer ext = config.getAdvancedExternalizer() != null ? config.getAdvancedExternalizer()
-               : (AdvancedExternalizer) Util.getInstance(config.getExternalizerClass(), globalCfg.getClassLoader());
+      for (Entry<Integer, AdvancedExternalizer<?>> entry : globalCfg.getSerialization().getAdvancedExternalizers().entrySet()) {
+         AdvancedExternalizer ext = entry.getValue();
 
          // If no XML or programmatic config, id in annotation is used
          // as long as it's not default one (meaning, user did not set it).
          // If XML or programmatic config in use ignore @Marshalls annotation and use value in config.
          Integer id = ext.getId();
-         if (config.getId() == null && id == null)
+         if (entry.getKey() == null && id == null)
             throw new ConfigurationException(String.format(
                   "No advanced externalizer identifier set for externalizer %s",
                   ext.getClass().getName()));
-         else if (config.getId() != null)
-            id = config.getId();
+         else if (entry.getKey() != null)
+            id = entry.getKey();
 
          id = checkForeignIdLimit(id, ext);
          updateExtReadersWritersWithTypes(new ForeignExternalizerAdapter(id, ext), generateForeignReaderIndex(id));

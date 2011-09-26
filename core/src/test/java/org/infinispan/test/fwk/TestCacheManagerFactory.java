@@ -184,7 +184,7 @@ public class TestCacheManagerFactory {
 
    /**
     * Creates a cache manager that won't try to modify the configured jmx domain name: {@link
-    * org.infinispan.config.GlobalConfiguration#getJmxDomain()}}. This method must be used with care, and one should
+    * org.infinispan.config.GlobalConfiguration#getDomain()}}. This method must be used with care, and one should
     * make sure that no domain name collision happens when the parallel suite executes. An approach to ensure this, is
     * to set the domain name to the name of the test class that instantiates the CacheManager.
     */

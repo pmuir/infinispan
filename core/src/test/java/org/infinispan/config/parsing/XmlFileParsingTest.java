@@ -321,7 +321,7 @@ public class XmlFileParsingTest extends AbstractInfinispanTest {
       assert !c.isExposeJmxStatistics();
       assert !gc.isExposeGlobalJmxStatistics();
       assert gc.isAllowDuplicateDomains();
-      assert gc.getJmxDomain().equals("funky_domain");
+      assert gc.getDomain().equals("funky_domain");
       assert gc.getMBeanServerLookup().equals("org.infinispan.jmx.PerThreadMBeanServerLookup");
 
       c = getNamedCacheConfig(namedCaches, "dist");

@@ -22,13 +22,10 @@
  */
 package org.infinispan.util;
 
-import org.infinispan.config.TypedPropertiesAdapter;
+import java.util.Properties;
+
 import org.infinispan.util.logging.Log;
 import org.infinispan.util.logging.LogFactory;
-
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.Properties;
 
 /**
  * Type-aware properties.  Extends the JDK {@link Properties} class to provide accessors that convert values to certain
@@ -40,8 +37,6 @@ import java.util.Properties;
  * @author Manik Surtani
  * @since 4.0
  */
-@XmlJavaTypeAdapter(TypedPropertiesAdapter.class)
-@XmlType(name="properties")
 public class TypedProperties extends Properties {
 
    /** The serialVersionUID */

@@ -26,7 +26,7 @@ import org.infinispan.AdvancedCache;
 import org.infinispan.Cache;
 import org.infinispan.CacheException;
 import org.infinispan.config.Configuration;
-import org.infinispan.config.GlobalConfiguration;
+import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.factories.AbstractComponentRegistry;
 import org.infinispan.factories.GlobalComponentRegistry;
 import org.infinispan.factories.AbstractComponentRegistry.Component;
@@ -141,13 +141,13 @@ public class CacheJmxRegistration extends AbstractJmxRegistration {
                                MBeanServer mBeanServer, String groupName) {
       GlobalConfiguration gc = componentRegistry.getComponent(GlobalConfiguration.class);
       CacheManagerJmxRegistration managerJmxReg = componentRegistry.getComponent(CacheManagerJmxRegistration.class);
-      if (!gc.isExposeGlobalJmxStatistics() && jmxDomain == null) {
+      if (!gc.getGlobalJmxStatistics().isEnabled() && jmxDomain == null) {
          String tmpJmxDomain = JmxUtil.buildJmxDomain(gc, mBeanServer, groupName);
          synchronized (managerJmxReg) {
             if (managerJmxReg.jmxDomain == null) {
-               if (!tmpJmxDomain.equals(gc.getJmxDomain()) && !gc.isAllowDuplicateDomains()) {
-                  log.cacheManagerAlreadyRegistered(gc.getJmxDomain());
-                  throw new JmxDomainConflictException(String.format("Domain already registered %s", gc.getJmxDomain()));
+               if (!tmpJmxDomain.equals(gc.getGlobalJmxStatistics().getDomain()) && !gc.getGlobalJmxStatistics().isAllowDuplicateDomains()) {
+                  log.cacheManagerAlreadyRegistered(gc.getGlobalJmxStatistics().getDomain());
+                  throw new JmxDomainConflictException(String.format("Domain already registered %s", gc.getGlobalJmxStatistics().getDomain()));
                }
                // Set manager component's jmx domain so that other caches under same manager 
                // can see it, particularly important when jmx is only enabled at the cache level
@@ -160,7 +160,7 @@ public class CacheJmxRegistration extends AbstractJmxRegistration {
       } else {
          // If global stats were enabled, manager's jmxDomain would have been populated 
          // when cache manager was started, so no need for synchronization here.
-         jmxDomain = managerJmxReg.jmxDomain == null ? gc.getJmxDomain() : managerJmxReg.jmxDomain;
+         jmxDomain = managerJmxReg.jmxDomain == null ? gc.getGlobalJmxStatistics().getDomain() : managerJmxReg.jmxDomain;
       }
       registrar.setJmxDomain(jmxDomain);
    }

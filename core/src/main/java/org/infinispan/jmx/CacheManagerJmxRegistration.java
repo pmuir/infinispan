@@ -22,7 +22,7 @@
  */
 package org.infinispan.jmx;
 
-import org.infinispan.config.GlobalConfiguration;
+import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.factories.AbstractComponentRegistry;
 import org.infinispan.factories.GlobalComponentRegistry;
 import org.infinispan.factories.annotations.Inject;
@@ -58,7 +58,7 @@ public class CacheManagerJmxRegistration extends AbstractJmxRegistration {
     * On start, the mbeans are registered.
     */
    public void start() {
-      if (globalConfig.isExposeGlobalJmxStatistics()) {
+      if (globalConfig.getGlobalJmxStatistics().isEnabled()) {
          registerMBeans(globalReg.getRegisteredComponents(), globalConfig);
       }
    }
@@ -70,7 +70,7 @@ public class CacheManagerJmxRegistration extends AbstractJmxRegistration {
       // This method might get called several times.
       // After the first call the cache will become null, so we guard this
       if (globalReg == null) return;
-      if (globalConfig.isExposeGlobalJmxStatistics()) {
+      if (globalConfig.getGlobalJmxStatistics().isEnabled()) {
          unregisterMBeans(globalReg.getRegisteredComponents());
       }
       globalReg = null;
@@ -81,7 +81,7 @@ public class CacheManagerJmxRegistration extends AbstractJmxRegistration {
       // Quote group name, to handle invalid ObjectName characters      
       String groupName = CACHE_MANAGER_JMX_GROUP
             + "," + ComponentsJmxRegistration.NAME_KEY
-            + "=" + ObjectName.quote(globalConfig.getCacheManagerName());
+            + "=" + ObjectName.quote(globalConfig.getGlobalJmxStatistics().getCacheManagerName());
       ComponentsJmxRegistration registrar = new ComponentsJmxRegistration(mBeanServer, components, groupName);
       updateDomain(registrar, mBeanServer, groupName);
       return registrar;
@@ -90,8 +90,8 @@ public class CacheManagerJmxRegistration extends AbstractJmxRegistration {
    protected void updateDomain(ComponentsJmxRegistration registrar, MBeanServer mBeanServer, String groupName) {
       if (jmxDomain == null) {
          jmxDomain = JmxUtil.buildJmxDomain(globalConfig, mBeanServer, groupName);
-         String configJmxDomain = globalConfig.getJmxDomain();
-         if (!jmxDomain.equals(configJmxDomain) && !globalConfig.isAllowDuplicateDomains()) {
+         String configJmxDomain = globalConfig.getGlobalJmxStatistics().getDomain();
+         if (!jmxDomain.equals(configJmxDomain) && !globalConfig.getGlobalJmxStatistics().isAllowDuplicateDomains()) {
             log.cacheManagerAlreadyRegistered(configJmxDomain);
             throw new JmxDomainConflictException(String.format("Domain already registered %s", configJmxDomain));
          }

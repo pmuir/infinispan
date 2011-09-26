@@ -83,6 +83,6 @@ public class ConfigurationCloneTest extends SingleCacheManagerTest {
       String newJmxDomain = m.getName();
       clone.setJmxDomain(newJmxDomain);
       EmbeddedCacheManager cacheManager = TestCacheManagerFactory.createCacheManagerEnforceJmxDomain(clone);
-      assert cacheManager.getGlobalConfiguration().getJmxDomain().equals(newJmxDomain);
+      assert cacheManager.getGlobalConfiguration().getDomain().equals(newJmxDomain);
    }
 }

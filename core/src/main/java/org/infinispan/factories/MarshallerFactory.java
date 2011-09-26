@@ -23,7 +23,6 @@
 package org.infinispan.factories;
 
 import org.infinispan.CacheException;
-import org.infinispan.config.GlobalConfiguration;
 import org.infinispan.factories.annotations.DefaultFactoryFor;
 import org.infinispan.marshall.CacheMarshaller;
 import org.infinispan.marshall.GlobalMarshaller;
@@ -62,7 +61,7 @@ public class MarshallerFactory extends NamedComponentFactory implements AutoInst
 
    protected VersionAwareMarshaller createMarshaller() {
       return (VersionAwareMarshaller) Util.getInstance(
-            globalConfiguration.getMarshallerClass(), globalConfiguration.getClassLoader());
+            globalConfiguration.getSerialization().getMarshallerClass());
    }
 
 }
