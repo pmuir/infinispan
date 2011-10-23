@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2011 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library; if not, write to the Free Software
+  ~ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA
+  -->
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  Log4j Configuration                                                  -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!-- $Id: log4j.xml,v 1.21 2006/10/24 17:22:04 msurtani Exp $ -->
+
+<!--
+   | For more configuration infromation and examples see the Jakarta Log4j
+   | owebsite: http://jakarta.apache.org/log4j
+ -->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+   <!-- ================================= -->
+   <!-- Preserve messages in a local file -->
+   <!-- ================================= -->
+
+   <!-- A time/date based rolling appender -->
+   <appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+      <param name="File" value="/Users/g/Varia/nearcache-demo.log"/>
+      <param name="Append" value="false"/>
+
+      <!-- Rollover at midnight each day -->
+      <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+
+      <!-- Rollover at the top of each hour
+      <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+      -->
+      <!-- param name="Threshold" value="TRACE"/ -->
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) Message\n -->
+        <param name="ConversionPattern" value="%d %-5r %-5p [%c] (%t:%x) %m%n"/>
+      </layout>
+   </appender>
+
+   <!-- ============================== -->
+   <!-- Append messages to the console -->
+   <!-- ============================== -->
+
+   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <param name="Threshold" value="INFO"/>
+      <param name="Target" value="System.out"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <param name="ConversionPattern" value="%d %-5p [%c{1}] (%t) %m%n"/>
+      </layout>
+   </appender>
+
+
+   <!-- ================ -->
+   <!-- Limit categories -->
+   <!-- ================ -->
+
+   <!-- Limit JBoss categories to INFO
+   <category name="org.jboss">
+     <priority value="INFO"/>
+   </category>
+   -->
+
+   <!--
+      | An example of enabling the custom TRACE level priority that is used
+      | by the JBoss internals to diagnose low level details. This example
+      | turns on TRACE level msgs for the org.jboss.ejb.plugins package and its
+      | subpackages. This will produce A LOT of logging output.
+   <category name="org.jboss.system">
+     <priority value="TRACE"/>
+   </category>
+   -->
+
+   <category name="org.infinispan">
+      <priority value="TRACE"/>
+   </category>
+
+   <category name="org.infinispan.factories">
+      <!-- 
+      <priority value="INFO"/>
+      -->
+      <priority value="TRACE"/>
+   </category>
+
+   <category name="org.jboss.marshalling">
+      <priority value="TRACE"/>
+   </category>
+
+   <category name="org.hibernate">
+      <priority value="TRACE"/>
+   </category>
+
+   <category name="org.jboss.netty">
+      <priority value="TRACE"/>
+   </category>
+
+   <category name="org.jboss.serial">
+      <priority value="INFO"/>
+   </category>
+
+   <category name="org.jboss.tm">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="org.jgroups">
+      <priority value="WARN"/>
+   </category>
+
+   <category name="org.jgroups.util.TimeScheduler2">
+      <priority value="TRACE"/>
+   </category>
+
+   <category name="net.spy.memcached">
+      <priority value="TRACE"/>
+   </category>
+
+   <!-- ======================= -->
+   <!-- Setup the Root category -->
+   <!-- ======================= -->
+
+   <root>
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE"/>
+   </root>
+
+</log4j:configuration>
