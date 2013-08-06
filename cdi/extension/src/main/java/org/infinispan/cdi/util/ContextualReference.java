@@ -2,6 +2,7 @@ package org.infinispan.cdi.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
@@ -18,6 +19,9 @@ public class ContextualReference<T> {
 
     public ContextualReference(BeanManager beanManager, Type beantype, Annotation... qualifiers) {
         this.bean = (Bean<T>) beanManager.resolve(beanManager.getBeans(beantype, qualifiers));
+        if (this.bean == null) {
+            throw new IllegalStateException("Unable to resolve bean of type: " + beantype + " with qualifiers: " + Arrays.toString(qualifiers));
+        }
     }
 
     /**
